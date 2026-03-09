@@ -261,7 +261,12 @@ export function checkPolicy(
   // Check if this category requires confirmation
   if (confirmCategories.has(category)) return 'confirm';
 
-  if (!policy) return 'allow';
+  // Without a policy file, eval actions are denied by default.
+  // Operators must explicitly allow 'eval' in their policy file to enable JS execution.
+  if (!policy) {
+    if (category === 'eval') return 'deny';
+    return 'allow';
+  }
 
   // Explicit allow list
   if (policy.allow?.includes(category)) return 'allow';

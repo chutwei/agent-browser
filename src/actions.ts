@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto';
 import * as fs from 'fs';
 import * as path from 'path';
 import type { Page, Frame } from 'playwright-core';
@@ -745,7 +746,7 @@ async function handleScreenshot(
     if (!savePath) {
       const ext = command.format === 'jpeg' ? 'jpg' : 'png';
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const random = Math.random().toString(36).substring(2, 8);
+      const random = randomBytes(4).toString('hex');
       const filename = `screenshot-${timestamp}-${random}.${ext}`;
       const screenshotDir = path.join(getAppDir(), 'tmp', 'screenshots');
       mkdirSync(screenshotDir, { recursive: true });
@@ -1765,7 +1766,7 @@ async function handleProfilerStop(
   let outputPath = command.path;
   if (!outputPath) {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const random = Math.random().toString(36).substring(2, 8);
+    const random = randomBytes(4).toString('hex');
     const filename = `profile-${timestamp}-${random}.json`;
     const profileDir = path.join(getAppDir(), 'tmp', 'profiles');
     mkdirSync(profileDir, { recursive: true });

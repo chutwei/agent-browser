@@ -255,6 +255,9 @@ async function findCursorInteractiveElements(
     return results;
   }`;
 
+  // new Function() is used here to avoid TypeScript transpilation issues with the
+  // in-page script. scriptBody is a hardcoded string literal with no user input -- safe.
+  // SECURITY: If scriptBody ever incorporates user-supplied data, this must be refactored.
   // eslint-disable-next-line @typescript-eslint/no-implied-eval
   const fn = new Function('return ' + scriptBody)();
   return page.evaluate(fn, rootSelector);

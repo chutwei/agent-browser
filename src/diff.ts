@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import type { BrowserContext } from 'playwright-core';
 import type { DiffSnapshotData, DiffScreenshotData } from './types.js';
 import { writeFile, mkdir } from 'node:fs/promises';
@@ -184,7 +185,7 @@ export async function diffScreenshots(
   const baselineMime = opts.baselineMime ?? 'image/png';
   const threshold = opts.threshold ?? 0.1;
 
-  const nonce = Math.random().toString(36).slice(2, 10);
+  const nonce = randomUUID().replace(/-/g, '').slice(0, 8);
   const blankUrl = `${DIFF_ROUTE_PREFIX}/${nonce}/index.html`;
   const baselineUrl = `${DIFF_ROUTE_PREFIX}/${nonce}/baseline.png`;
   const currentUrl = `${DIFF_ROUTE_PREFIX}/${nonce}/current.png`;

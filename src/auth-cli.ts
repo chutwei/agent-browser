@@ -72,7 +72,6 @@ function run(): void {
             updated: meta.updated,
             name: meta.name,
             url: meta.url,
-            username: meta.username,
           })
         );
         return;
