@@ -239,7 +239,7 @@ export class IOSManager {
    */
   private async checkAppiumInstalled(): Promise<boolean> {
     return new Promise((resolve) => {
-      const proc = spawn('appium', ['--version'], { shell: true });
+      const proc = spawn('appium', ['--version'], { shell: false });
       proc.on('close', (code) => resolve(code === 0));
       proc.on('error', () => resolve(false));
     });
