@@ -1,6 +1,8 @@
 # Multi-platform Rust cross-compilation image
 FROM rust:1.85-bookworm
 
+HEALTHCHECK NONE
+
 # Install cross-compilation toolchains
 RUN apt-get update && apt-get install -y \
     gcc-aarch64-linux-gnu \
@@ -19,13 +21,14 @@ RUN rustup target add \
     x86_64-pc-windows-gnu
 
 # Install cargo-zigbuild for easier cross-compilation (especially macOS)
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -sSL https://ziglang.org/download/0.13.0/zig-linux-x86_64-0.13.0.tar.xz | tar -xJ -C /opt \
     && ln -s /opt/zig-linux-x86_64-0.13.0/zig /usr/local/bin/zig
 RUN cargo install cargo-zigbuild
 
 # Configure linkers for cross-compilation
-RUN mkdir -p /.cargo
-RUN echo '[target.aarch64-unknown-linux-gnu]\nlinker = "aarch64-linux-gnu-gcc"\n\n[target.x86_64-pc-windows-gnu]\nlinker = "x86_64-w64-mingw32-gcc"\n' > /.cargo/config.toml
+RUN mkdir -p /.cargo && \
+    printf '[target.aarch64-unknown-linux-gnu]\nlinker = "aarch64-linux-gnu-gcc"\n\n[target.x86_64-pc-windows-gnu]\nlinker = "x86_64-w64-mingw32-gcc"\n' > /.cargo/config.toml
 
 WORKDIR /build
 

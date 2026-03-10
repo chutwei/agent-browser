@@ -278,7 +278,7 @@ export class IOSManager {
         'appium',
         ['--port', String(IOSManager.APPIUM_PORT), '--relaxed-security'],
         {
-          shell: true,
+          shell: false,
           stdio: ['ignore', 'pipe', 'pipe'],
         }
       );
